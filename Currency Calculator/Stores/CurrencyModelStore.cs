@@ -44,18 +44,22 @@ namespace Currency_Calculator.Stores
 
                 _currencyStore.Add(calculatorViewModel.EffectiveDate, listOfCurrency);
                 await Saved(calculatorViewModel);
-                await _saveCurrencyCommand.Execute(new CurrecnyRatesAndEffectiveDateModel(calculatorViewModel.EffectiveDate, _currencyStore[calculatorViewModel.EffectiveDate]));
+                await _saveCurrencyCommand
+                    .Execute(new CurrecnyRatesAndEffectiveDateModel(
+                        calculatorViewModel.EffectiveDate, _currencyStore[calculatorViewModel.EffectiveDate]));
             }
 
             else
             {
-                MessageBox.Show("This table is already saved!", "Table", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("This table is already saved!", "Table", 
+                    MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }   
 
         public async Task Load(CalculatorViewModel calculatorViewModel)
         {
-            List<CurrecnyRatesAndEffectiveDateModel> currecnyRatesAndEffectiveDateModel = await _getAllCurrienciesQuery.Execute();
+            List<CurrecnyRatesAndEffectiveDateModel> currecnyRatesAndEffectiveDateModel 
+                = await _getAllCurrienciesQuery.Execute();
             
             foreach (var item in currecnyRatesAndEffectiveDateModel)
             {

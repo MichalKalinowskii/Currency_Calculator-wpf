@@ -17,7 +17,7 @@ namespace Currency_Calculator.Commands
 
         public CalculatorLoadOnStartCommand(CalculatorViewModel calculatorViewModel, CurrencyModelStore currencyModelStore)
         {
-            _currencyModelStore=currencyModelStore;
+            _currencyModelStore = currencyModelStore;
             _calculatorViewModel = calculatorViewModel;
         }
 

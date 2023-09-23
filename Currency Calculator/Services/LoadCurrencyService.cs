@@ -19,7 +19,7 @@ namespace Currency_Calculator.Services
             }
             
             calculatorViewModel.EffectiveDate = effectiveDate;
-            calculatorViewModel.DisplayResult = 0;
+            calculatorViewModel.DisplayResult = "";
         }
 
     }

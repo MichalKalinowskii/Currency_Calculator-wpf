@@ -14,18 +14,34 @@ using System.Windows.Input;
 
 namespace Currency_Calculator.ViewModels
 {
-    public class CalculatorViewModel:ViewModelBase
+    public class CalculatorViewModel : ViewModelBase
     {
 
+        public bool CallucationAlreadMade { get; set; }
+
         private string _givenValue;
-        public string GivenValue
+        public string GivenValueByUser
         {
             get { return _givenValue; }
             set 
             {
                 _givenValue = value;
-                OnPropertyChanged(nameof(_givenValue));
-                _call.CallCalculattion(this);
+                OnPropertyChanged(nameof(GivenValueByUser));
+                if(!CallucationAlreadMade)
+                    GetCalculattion(nameof(GivenValueByUser));
+            }
+        }
+
+        private string _displayResult;
+        public string DisplayResult
+        {
+            get { return _displayResult; }
+            set
+            {
+                _displayResult = value;
+                OnPropertyChanged(nameof(DisplayResult));
+                if (!CallucationAlreadMade)
+                    GetCalculattion(nameof(DisplayResult));
             }
         }
 
@@ -109,7 +125,8 @@ namespace Currency_Calculator.ViewModels
             {
                 _selectedCurrencyConvertFrom = value;
                 OnPropertyChanged(nameof(SelectedCurrencyConvertFrom));
-                _call.CallCalculattion(this);
+                if(GivenValueByUser != null && GivenValueByUser != string.Empty && !CallucationAlreadMade)
+                    GetCalculattion(nameof(GivenValueByUser));
             }
         }
 
@@ -122,19 +139,8 @@ namespace Currency_Calculator.ViewModels
             {
                 _selectedCurrencyConvertTo = value;
                 OnPropertyChanged(nameof(SelectedCurrencyConvertTo));
-                _call.CallCalculattion(this);
-            }
-        }
-
-
-        private double _displayResult;
-        public double DisplayResult
-        {
-            get { return _displayResult; }
-            set
-            {
-                _displayResult = value;
-                OnPropertyChanged(nameof(DisplayResult));
+                if (DisplayResult != null && DisplayResult != string.Empty && !CallucationAlreadMade)
+                    GetCalculattion(nameof(DisplayResult));
             }
         }
 
@@ -188,6 +194,20 @@ namespace Currency_Calculator.ViewModels
             {
                 CoolectionOfSavedDates.Add(item);
             }
+        }
+
+        private void GetCalculattion(string propertName)
+        {
+            CallucationAlreadMade = true;
+            if (nameof(GivenValueByUser).Equals(propertName))
+            {
+                _call.CallCalculattionForFirstInput(this);                
+            }
+            else
+            {               
+                _call.CallCalculattionForSecondInput(this);
+            }
+            CallucationAlreadMade = false;
         }
     }
 }

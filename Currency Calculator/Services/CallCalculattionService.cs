@@ -19,28 +19,62 @@ namespace Currency_Calculator.Services
         private MakeCalculationService result = new();
 
 
-        public void CallCalculattion(CalculatorViewModel calculator)
+        public void CallCalculattionForFirstInput(CalculatorViewModel calculator)
         {
-            if (calculator.SelectedCurrencyConvertFrom != null && calculator.GivenValue != null && calculator.SelectedCurrencyConvertTo != null)
+            if (calculator.SelectedCurrencyConvertFrom != null && calculator.GivenValueByUser != null
+                && calculator.SelectedCurrencyConvertTo != null)
             {
                 try
                 {
-                    if (rule.Validate(calculator.GivenValue))
+                    if (rule.Validate(calculator.GivenValueByUser))
                     {
-                        calculator.DisplayResult = result.Calculate(
-                            calculator.SelectedCurrencyConvertFrom.ExchangeRate,
+                        calculator.DisplayResult = GetCalculationResult(
+                            calculator.SelectedCurrencyConvertFrom.ExchangeRate, 
                             calculator.SelectedCurrencyConvertTo.ExchangeRate,
-                            modifaction.ModifyCorrectStringToDouble(calculator.GivenValue));
+                            calculator.GivenValueByUser);
                     }
                     else throw new Exception();
 
                 }
-                catch(Exception)
+                catch (Exception)
                 {
-                    calculator.DisplayResult = 0;
+                    calculator.DisplayResult = "";
                 }
 
             }
+        }
+
+        public void CallCalculattionForSecondInput(CalculatorViewModel calculator)
+        {
+            if (calculator.SelectedCurrencyConvertFrom != null && calculator.DisplayResult != null
+                && calculator.SelectedCurrencyConvertTo != null)
+            {
+                try
+                {
+                    if (rule.Validate(calculator.DisplayResult))
+                    {
+                        calculator.GivenValueByUser = GetCalculationResult(
+                            calculator.SelectedCurrencyConvertTo.ExchangeRate,
+                            calculator.SelectedCurrencyConvertFrom.ExchangeRate,
+                            calculator.DisplayResult);
+                    }
+                    else throw new Exception();
+
+                }
+                catch (Exception)
+                {
+                    calculator.GivenValueByUser = "";
+                }
+            }
+        }
+
+        private string GetCalculationResult(double ExchangeRateFrom, double ExchangeRateTo, string givenValue)
+        {
+            return result.Calculate(
+                            ExchangeRateFrom,
+                            ExchangeRateTo,
+                            modifaction.ModifyCorrectStringToDouble(givenValue))
+                .ToString();
         }
 
     }
